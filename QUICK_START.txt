@@ -1,0 +1,96 @@
+═══════════════════════════════════════════════════════════════
+  FINANZAS OPENFRIENDS - QUICK START GUIDE
+═══════════════════════════════════════════════════════════════
+
+📋 PASO 1: INSTALAR NODE.JS
+─────────────────────────────────────────────────────────────
+1. Ir a: https://nodejs.org/
+2. Descargar versión LTS (recomendada)
+3. Ejecutar instalador
+4. Reiniciar terminal/PowerShell
+
+📦 PASO 2: INSTALAR DEPENDENCIAS
+─────────────────────────────────────────────────────────────
+Abrir terminal en la carpeta del proyecto y ejecutar:
+
+   npm install
+
+⏳ Esto tomará 1-2 minutos
+
+🚀 PASO 3: INICIAR APLICACIÓN
+─────────────────────────────────────────────────────────────
+Ejecutar:
+
+   npm run dev
+
+✅ La app se abrirá automáticamente en http://localhost:3000
+
+📱 PASO 4: VISTA MÓVIL
+─────────────────────────────────────────────────────────────
+1. Presionar F12 (DevTools)
+2. Presionar Ctrl+Shift+M (Vista móvil)
+3. Seleccionar iPhone o Pixel
+4. ¡Listo! Explora la app
+
+═══════════════════════════════════════════════════════════════
+  PANTALLAS DISPONIBLES
+═══════════════════════════════════════════════════════════════
+
+📊 Resumen OpenFriends     → /openfriends
+💬 Chat OBI                → /chat-obi
+🧮 Split de Gastos         → /opensplit
+💰 Detalle de Apartado     → /apartado/1
+🏦 Crédito Compartido      → /credito/1
+📜 Historial               → /historial
+➕ Crear Grupo             → /crear-grupo
+
+═══════════════════════════════════════════════════════════════
+  NAVEGACIÓN
+═══════════════════════════════════════════════════════════════
+
+• Menú inferior: Cambiar entre secciones
+• Botón "Amigos" (derecha): Acceder a OpenFriends
+• Botón flotante 💬: Chat OBI desde cualquier pantalla
+• Flecha atrás ←: Volver a pantalla anterior
+
+═══════════════════════════════════════════════════════════════
+  CARACTERÍSTICAS PRINCIPALES
+═══════════════════════════════════════════════════════════════
+
+✨ Gráfico circular interactivo de deudas
+✨ Chat conversacional con OBI
+✨ Dividir gastos entre amigos
+✨ Apartados compartidos con progreso
+✨ Sistema de votaciones grupales
+✨ Simulador de crédito compartido
+✨ Firmas digitales para créditos
+✨ Historial completo con filtros
+✨ Crear grupos personalizados
+✨ Animaciones y microinteracciones
+
+═══════════════════════════════════════════════════════════════
+  PROBLEMAS COMUNES
+═══════════════════════════════════════════════════════════════
+
+❌ "npm no se reconoce"
+   → Instalar Node.js primero
+
+❌ "Cannot find module"
+   → Ejecutar: npm install
+
+❌ Puerto 3000 ocupado
+   → Vite te ofrecerá otro puerto automáticamente
+
+❌ No se ve bien
+   → Activar vista móvil (F12 → Ctrl+Shift+M)
+
+═══════════════════════════════════════════════════════════════
+
+💡 TIP: Usa Chrome o Edge para mejor experiencia
+📱 TIP: Viewport recomendado: 375px - 480px ancho
+🎨 TIP: Todos los colores se pueden personalizar en src/index.css
+
+═══════════════════════════════════════════════════════════════
+  ¿LISTO? EJECUTA: npm install && npm run dev
+═══════════════════════════════════════════════════════════════
+

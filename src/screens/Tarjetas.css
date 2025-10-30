@@ -1,0 +1,350 @@
+.tarjetas-screen {
+  background-color: var(--bg-primary);
+  overflow-x: hidden; /* prevent any horizontal scroll */
+}
+
+.tarjetas-screen .screen-content {
+  padding-left: var(--spacing-2x);
+  padding-right: var(--spacing-2x);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.card-status {
+  background-color: var(--bg-card-light);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-3x);
+  margin-bottom: var(--spacing-3x);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #000;
+}
+
+.card-visual {
+  background: linear-gradient(135deg, #8B1538 0%, #C41E3A 100%);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-3x);
+  margin-bottom: var(--spacing-3x);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.openbank-logo {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-weight: 600;
+}
+
+.openbank-logo span:first-child {
+  font-size: 18px;
+}
+
+.credito-text {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.card-details {
+  color: white;
+}
+
+.card-type {
+  font-size: 12px;
+  margin-bottom: 4px;
+  opacity: 0.9;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-base);
+}
+
+.card-number {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.credit-info {
+  padding: var(--spacing-2x) 0;
+}
+
+.credit-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2x);
+  width: 100%;
+}
+
+.credit-line span:first-child {
+  font-size: 14px;
+  color: #333;
+}
+
+.credit-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.credit-progress {
+  margin-bottom: var(--spacing-3x);
+}
+
+.progress-bar-card {
+  height: 8px;
+  background-color: #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill-card {
+  height: 100%;
+  background-color: #0078FF;
+  transition: width 0.3s ease;
+}
+
+.credit-balances {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-2x);
+}
+
+.balance-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #333;
+}
+
+.balance-icon {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.balance-icon.used {
+  color: #0078FF;
+}
+
+.balance-icon.available {
+  color: #999;
+}
+
+.balance-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-2x);
+  margin-top: var(--spacing-3x);
+}
+
+.action-btn {
+  background-color: var(--red-primary);
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--spacing-base);
+  transition: var(--transition);
+}
+
+.action-btn span {
+  font-size: 9px;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.action-icon {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+  background-color: var(--red-hover);
+}
+
+.movements-section {
+  margin-top: var(--spacing-3x);
+  width: 100%;
+}
+
+.movements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2x);
+}
+
+.movements-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.filter-badge {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.month-badge {
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: var(--spacing-2x);
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base);
+  width: 100%;
+  max-width: 100%;
+}
+
+.transaction-card {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-2x);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.transaction-card.selected {
+  border-color: var(--blue-primary);
+  background-color: rgba(0, 120, 255, 0.1);
+}
+
+.transaction-card:active {
+  transform: scale(0.98);
+}
+
+.transaction-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.transaction-card.selected .transaction-checkbox {
+  background-color: var(--blue-primary);
+  border-color: var(--blue-primary);
+  color: white;
+}
+
+.transaction-icon-card {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.transaction-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.transaction-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-date {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.transaction-status {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.transaction-amount-card {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--pink);
+  flex-shrink: 0;
+}
+
+.split-button {
+  background-color: var(--red-primary);
+  color: white;
+  padding: var(--spacing-2x) var(--spacing-3x);
+  border-radius: var(--border-radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  width: 100%;
+  margin-top: var(--spacing-3x);
+  transition: var(--transition);
+}
+
+.split-button:active {
+  transform: scale(0.98);
+  background-color: var(--red-hover);
+}
+

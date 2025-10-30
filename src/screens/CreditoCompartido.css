@@ -1,0 +1,297 @@
+.credito-screen {
+  background-color: var(--bg-primary);
+}
+
+.credito-screen .screen-title {
+  color: var(--text-primary);
+}
+
+.credito-grupo-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
+  background-color: var(--bg-card);
+  padding: var(--spacing-2x);
+  border-radius: 12px;
+  margin-bottom: var(--spacing-3x);
+}
+
+.grupo-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grupo-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.grupo-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.credito-calculator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3x);
+}
+
+.calculator-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x);
+}
+
+.calculator-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.monto-display {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--aqua);
+  text-align: center;
+}
+
+.monto-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.monto-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: var(--transition);
+}
+
+.monto-slider::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+}
+
+.monto-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: none;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.plazo-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-base);
+}
+
+.plazo-button {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: var(--spacing-2x);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.plazo-button.active {
+  background-color: rgba(0, 120, 255, 0.2);
+  color: var(--blue-obi);
+  border-color: var(--blue-obi);
+}
+
+.plazo-button:active {
+  transform: scale(0.95);
+}
+
+.tasa-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  padding: var(--spacing-2x);
+  background-color: rgba(0, 120, 255, 0.1);
+  border-radius: 10px;
+  color: var(--blue-obi);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pago-result {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(61, 220, 151, 0.1) 100%);
+  padding: var(--spacing-3x);
+  border-radius: 12px;
+  text-align: center;
+  margin-top: var(--spacing-base);
+}
+
+.pago-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-base);
+}
+
+.pago-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--aqua);
+  margin-bottom: var(--spacing-base);
+}
+
+.pago-per-person {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.firmas-section {
+  margin: var(--spacing-3x) 0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2x);
+}
+
+.firmas-count {
+  color: var(--blue-obi);
+  font-size: 14px;
+}
+
+.firmas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-2x);
+}
+
+.firma-item {
+  background-color: var(--bg-card);
+  padding: var(--spacing-2x);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-base);
+  transition: var(--transition);
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.firma-item.firmado {
+  border-color: var(--aqua);
+  background-color: rgba(61, 220, 151, 0.1);
+}
+
+.firma-item:active {
+  transform: scale(0.95);
+}
+
+.firma-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.firma-item.firmado .firma-avatar {
+  font-size: 28px;
+  animation: pulse 0.5s ease-out;
+}
+
+.firma-nombre {
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.firma-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--aqua);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg-primary);
+}
+
+.info-card {
+  background-color: var(--bg-card);
+  padding: var(--spacing-3x);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-3x);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-2x);
+  color: var(--blue-obi);
+}
+
+.info-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x);
+  padding-left: 0;
+}
+
+.info-list li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding-left: var(--spacing-3x);
+  position: relative;
+  line-height: 1.5;
+}
+
+.info-list li::before {
+  content: '•';
+  position: absolute;
+  left: var(--spacing-base);
+  color: var(--blue-obi);
+  font-weight: bold;
+  font-size: 16px;
+}
+
