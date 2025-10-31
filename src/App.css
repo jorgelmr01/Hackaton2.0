@@ -4,7 +4,8 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   position: relative;
-  max-width: 430px;
+  width: 100%;
+  max-width: var(--app-max-width);
   margin: 0 auto;
 }
 
@@ -16,6 +17,8 @@
   overflow-y: auto;
   animation: fadeIn 0.4s ease-out;
   width: 100%;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
 }
 
 .screen-header {
@@ -27,6 +30,10 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  width: 100%;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .screen-title {
@@ -57,13 +64,25 @@
   flex: 1;
   padding: var(--spacing-2x);
   width: 100%;
-  max-width: 100%;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
   box-sizing: border-box;
+}
+
+.screen-content.light {
+  background-color: #FFFFFF;
+  color: #000000;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  --text-primary: #111111;
+  --text-secondary: #555555;
+  --bg-card: #F3F4F6;
+  --bg-secondary: #FFFFFF;
 }
 
 .primary-button {
   background-color: var(--red-primary);
-  color: var(--text-primary);
+  color: #FFFFFF;
   padding: var(--spacing-2x) var(--spacing-3x);
   border-radius: var(--border-radius-sm);
   font-size: 15px;

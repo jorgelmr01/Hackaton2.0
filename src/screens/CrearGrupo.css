@@ -1,9 +1,9 @@
 .crear-grupo-screen {
-  background-color: var(--bg-primary);
+  background-color: #F7F8FA;
 }
 
 .crear-grupo-screen .screen-title {
-  color: var(--text-primary);
+  color: #FFFFFF;
 }
 
 .grupo-preview {
@@ -11,25 +11,26 @@
   border-radius: var(--border-radius);
   text-align: center;
   margin-bottom: var(--spacing-3x);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.25);
   transition: var(--transition);
   width: 100%;
+  color: #FFFFFF;
 }
 
 .preview-icon {
   margin-bottom: var(--spacing-2x);
+  font-size: 32px;
 }
 
 .preview-name {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: var(--spacing-base);
-  color: white;
 }
 
 .preview-meta {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .form-group {
@@ -44,7 +45,7 @@
   font-size: 15px;
   font-weight: 600;
   margin-bottom: var(--spacing-2x);
-  color: var(--text-primary);
+  color: #1F2933;
 }
 
 .required {
@@ -59,52 +60,56 @@
 
 .form-input {
   width: 100%;
-  background-color: var(--bg-card);
-  color: var(--text-primary);
+  background-color: #FFFFFF;
+  color: #1F2933;
   padding: var(--spacing-2x);
   border-radius: 12px;
   font-size: 15px;
   transition: var(--transition);
-  border: 2px solid transparent;
+  border: 1px solid #CBD5E1;
   box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 .form-input:focus {
   border-color: var(--blue-obi);
-  background-color: #252525;
+  background-color: #F8FBFF;
+  box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.12);
 }
 
 .form-input::placeholder {
-  color: var(--text-secondary);
+  color: #94A3B8;
 }
 
 .input-with-prefix {
   position: relative;
   display: flex;
   align-items: center;
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
   border-radius: 12px;
   padding: 0 var(--spacing-2x);
-  border: 2px solid transparent;
+  border: 1px solid #CBD5E1;
   transition: var(--transition);
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
 }
 
 .input-with-prefix:focus-within {
   border-color: var(--blue-obi);
-  background-color: #252525;
+  background-color: #F8FBFF;
+  box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.12);
 }
 
 .input-prefix {
-  color: var(--text-secondary);
+  color: #475569;
   font-size: 16px;
   font-weight: 600;
   margin-right: var(--spacing-base);
 }
 
 .input-suffix {
-  color: var(--text-secondary);
+  color: #475569;
   font-size: 14px;
   margin-left: var(--spacing-base);
 }
@@ -113,11 +118,13 @@
   background: transparent;
   padding: var(--spacing-2x) 0;
   border: none;
+  box-shadow: none;
 }
 
 .form-input.with-prefix:focus {
   border: none;
   background: transparent;
+  box-shadow: none;
 }
 
 .colores-grid {
@@ -134,11 +141,15 @@
   justify-content: center;
   transition: var(--transition);
   border: 3px solid transparent;
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .color-option.selected {
-  border-color: white;
-  transform: scale(1.1);
+  border-color: #FFFFFF;
+  transform: scale(1.08);
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.18);
 }
 
 .color-option:active {
@@ -154,12 +165,14 @@
 }
 
 .participante-item {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
   padding: var(--spacing-2x);
   border-radius: 12px;
   display: flex;
   align-items: center;
   gap: var(--spacing-2x);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
 .participante-avatar {
@@ -172,7 +185,7 @@
   font-size: 14px;
   font-weight: 600;
   flex-shrink: 0;
-  color: white;
+  color: #FFFFFF;
 }
 
 .participante-info {
@@ -185,32 +198,32 @@
 .participante-nombre {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #1F2933;
 }
 
 .participante-telefono {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: #64748B;
 }
 
 .participante-badge {
   display: inline-block;
-  padding: 2px 8px;
-  background-color: rgba(0, 120, 255, 0.2);
+  padding: 4px 10px;
+  background-color: rgba(0, 120, 255, 0.15);
   color: var(--blue-obi);
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 11px;
   font-weight: 600;
 }
 
 .participante-badge.externo {
-  background-color: rgba(255, 241, 118, 0.2);
-  color: var(--yellow);
+  background-color: rgba(255, 241, 118, 0.25);
+  color: #B45309;
 }
 
 .delete-button {
   background: transparent;
-  color: var(--text-secondary);
+  color: #94A3B8;
   padding: 4px;
   width: 32px;
   height: 32px;
@@ -220,8 +233,12 @@
   transition: var(--transition);
 }
 
+.delete-button:hover,
+.delete-button:focus {
+  color: var(--red-primary);
+}
+
 .delete-button:active {
-  color: var(--pink);
   transform: scale(1.1);
 }
 
@@ -231,7 +248,7 @@
 
 .subsection-label {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: #475569;
   font-weight: 600;
   margin-bottom: var(--spacing-2x);
 }
@@ -244,9 +261,9 @@
 }
 
 .amigo-chip {
-  background-color: var(--bg-card);
-  padding: 10px var(--spacing-2x);
-  border-radius: 12px;
+  background-color: #FFFFFF;
+  padding: 12px var(--spacing-2x);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   gap: var(--spacing-2x);
@@ -254,16 +271,19 @@
   transition: var(--transition);
   text-align: left;
   width: 100%;
-  color: var(--text-primary);
+  color: #1F2933;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
 }
 
-.amigo-chip span {
-  color: var(--text-primary);
+.amigo-chip.selected {
+  border-color: var(--blue-obi);
+  background-color: rgba(0, 120, 255, 0.08);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
 }
 
 .amigo-chip:active {
   transform: scale(0.98);
-  background-color: rgba(0, 120, 255, 0.1);
 }
 
 .amigo-avatar {
@@ -276,7 +296,24 @@
   justify-content: center;
   font-size: 12px;
   font-weight: 600;
+  color: #FFFFFF;
   flex-shrink: 0;
+}
+
+.amigo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.amigo-nombre {
+  font-weight: 600;
+  color: #1F2933;
+}
+
+.amigo-telefono {
+  font-size: 12px;
+  color: #64748B;
 }
 
 .add-icon {
@@ -287,7 +324,7 @@
 }
 
 .add-external-form {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
   padding: var(--spacing-3x);
   border-radius: 12px;
   display: flex;
@@ -295,6 +332,8 @@
   gap: var(--spacing-2x);
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
 .form-actions {
@@ -307,6 +346,21 @@
 .primary-button.large {
   padding: 18px var(--spacing-3x);
   font-size: 17px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 18px rgba(230, 0, 0, 0.35);
+}
+
+.primary-button.large:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.empty-participants {
+  font-size: 13px;
+  color: #64748B;
+  background-color: #EFF6FF;
+  border: 1px dashed #93C5FD;
+  border-radius: 12px;
+  padding: 16px;
 }
 

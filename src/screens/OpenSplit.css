@@ -1,14 +1,23 @@
 .opensplit-screen {
-  background-color: var(--bg-primary);
+  background-color: #F7F8FA;
+  color: #1F2933;
   width: 100%;
 }
 
+.opensplit-screen .screen-header {
+  background-color: var(--bg-primary);
+}
+
 .opensplit-screen .screen-title {
-  color: var(--text-primary);
+  color: #FFFFFF;
+}
+
+.opensplit-screen .screen-content.light {
+  background-color: #FFFFFF;
 }
 
 .info-text {
-  color: var(--text-secondary);
+  color: #6B7280;
   font-size: 14px;
   margin-bottom: var(--spacing-2x);
   text-align: center;
@@ -22,7 +31,7 @@
 }
 
 .transaction-item {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
   border-radius: 12px;
   padding: var(--spacing-2x);
   display: flex;
@@ -30,12 +39,13 @@
   gap: var(--spacing-2x);
   cursor: pointer;
   transition: var(--transition);
-  border: 2px solid transparent;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
 }
 
 .transaction-item.selected {
   border-color: var(--blue-obi);
-  background-color: rgba(0, 120, 255, 0.1);
+  background-color: rgba(0, 120, 255, 0.08);
 }
 
 .transaction-item:active {
@@ -62,12 +72,13 @@
 .transaction-icon {
   width: 40px;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 120, 255, 0.12);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: var(--blue-obi);
 }
 
 .transaction-info {
@@ -81,21 +92,19 @@
 .transaction-name {
   font-size: 14px;
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--text-primary);
+  color: #1F2933;
+  margin-bottom: 4px;
 }
 
 .transaction-details {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: #6B7280;
 }
 
 .transaction-amount {
   font-size: 16px;
   font-weight: 600;
-  color: var(--pink);
+  color: var(--red-primary);
   flex-shrink: 0;
 }
 
@@ -145,7 +154,8 @@
 }
 
 .radio-option {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   padding: var(--spacing-2x);
   border-radius: 12px;
   display: flex;
@@ -160,7 +170,7 @@
 
 .radio-option.selected {
   border-color: var(--blue-obi);
-  background-color: rgba(0, 120, 255, 0.1);
+  background-color: rgba(0, 120, 255, 0.08);
 }
 
 .radio-circle {
@@ -240,7 +250,8 @@
 }
 
 .friend-chip {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   padding: 12px var(--spacing-2x);
   border-radius: 12px;
   display: flex;
@@ -300,7 +311,8 @@
 }
 
 .amount-row {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   padding: var(--spacing-2x);
   border-radius: 12px;
   display: flex;
@@ -309,10 +321,9 @@
 }
 
 .amount-input {
-  margin-left: auto;
-  background-color: #252525;
-  color: var(--text-primary);
-  border: 1px solid rgba(255,255,255,0.1);
+  background-color: #F0F2F5;
+  color: #1F2933;
+  border: 1px solid #E5E7EB;
   border-radius: 10px;
   padding: 8px 10px;
   width: 120px;
@@ -353,7 +364,7 @@
 
 .confirm-text {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #6B7280;
   text-align: center;
   margin-bottom: var(--spacing-2x);
   line-height: 1.6;
@@ -393,7 +404,8 @@
 }
 
 .participant-item {
-  background-color: var(--bg-card);
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   padding: var(--spacing-2x);
   border-radius: 12px;
   display: flex;
@@ -405,5 +417,17 @@
   margin-left: auto;
   font-weight: 600;
   color: var(--aqua);
+}
+
+.card {
+  background-color: #FFFFFF;
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-2x);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  border: 1px solid #E5E7EB;
+}
+
+.confirm-split .card {
+  text-align: center;
 }
 

@@ -1,283 +1,291 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './CrearGrupo.css'
+import { formatCurrency } from '../utils/format'
+
+const palette = [
+  { id: 'pink', label: 'Viaje Cancún', value: '#E91E63' },
+  { id: 'aqua', label: 'Roomies', value: '#3DDC97' },
+  { id: 'yellow', label: 'Apartados', value: '#FFF176' },
+  { id: 'purple', label: 'Fiesta', value: '#6A1B9A' },
+  { id: 'green', label: 'Inversión', value: '#004D40' },
+  { id: 'blue', label: 'Otros', value: '#0078FF' }
+]
+
+const amigosCatalogo = [
+  { id: 1, nombre: 'María García', telefono: '+52 55 1234 5678', interno: true },
+  { id: 2, nombre: 'Carlos Ruiz', telefono: '+52 55 8765 4321', interno: true },
+  { id: 3, nombre: 'Ana López', telefono: '+52 55 9988 7766', interno: true }
+]
 
 const CrearGrupo = ({ setShowBottomNav }) => {
   const navigate = useNavigate()
   const [nombre, setNombre] = useState('')
-  const [metaAhorro, setMetaAhorro] = useState('')
-  const [colorSeleccionado, setColorSeleccionado] = useState('#E91E63')
-  const [participantes, setParticipantes] = useState([
-    { id: 1, nombre: 'Jorge Luis (Tú)', initials: 'JL', tipo: 'yo', selected: true }
-  ])
-  const [nuevoNombre, setNuevoNombre] = useState('')
-  const [nuevoTelefono, setNuevoTelefono] = useState('')
-  const [showAddExternal, setShowAddExternal] = useState(false)
+  const [meta, setMeta] = useState('')
+  const [color, setColor] = useState(palette[0])
+  const [amigos, setAmigos] = useState(() => amigosCatalogo.map((amigo) => ({ ...amigo, selected: false })))
+  const [externos, setExternos] = useState([])
+  const [externo, setExterno] = useState({ nombre: '', telefono: '' })
+  const [previewActive, setPreviewActive] = useState(false)
 
   useEffect(() => {
-    setShowBottomNav(true)
+    setShowBottomNav(false)
+    return () => setShowBottomNav(true)
   }, [setShowBottomNav])
 
-  const colores = [
-    { color: '#E91E63', nombre: 'Rosa' },
-    { color: '#3DDC97', nombre: 'Aqua' },
-    { color: '#0078FF', nombre: 'Azul' },
-    { color: '#FFF176', nombre: 'Amarillo' },
-    { color: '#6A1B9A', nombre: 'Morado' },
-    { color: '#004D40', nombre: 'Verde oscuro' },
-  ]
+  const participantes = useMemo(
+    () => [...amigos.filter((amigo) => amigo.selected), ...externos],
+    [amigos, externos]
+  )
 
-  const amigosOpenbank = [
-    { id: 2, nombre: 'María García', initials: 'MG', tipo: 'openbank' },
-    { id: 3, nombre: 'Carlos Ruiz', initials: 'CR', tipo: 'openbank' },
-    { id: 4, nombre: 'Ana López', initials: 'AL', tipo: 'openbank' },
-    { id: 5, nombre: 'Pedro Sánchez', initials: 'PS', tipo: 'openbank' },
-  ]
+  const metaNumerica = Number(meta)
+  const metaLegible = metaNumerica > 0 ? formatCurrency(metaNumerica) : '$0.00'
 
-  const toggleParticipante = (id) => {
-    setParticipantes(prev =>
-      prev.map(p => p.id === id ? { ...p, selected: !p.selected } : p)
+  const toggleAmigo = (id) => {
+    setAmigos((prev) =>
+      prev.map((amigo) =>
+        amigo.id === id
+          ? {
+              ...amigo,
+              selected: !amigo.selected
+            }
+          : amigo
+      )
     )
   }
 
-  const agregarAmigo = (amigo) => {
-    if (!participantes.find(p => p.id === amigo.id)) {
-      setParticipantes([...participantes, { ...amigo, selected: true }])
-    }
-  }
-
   const agregarExterno = () => {
-    if (nuevoNombre.trim() && nuevoTelefono.trim()) {
-      const nuevoParticipante = {
-        id: Date.now(),
-        nombre: nuevoNombre,
-        initials: nuevoNombre.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
-        tipo: 'externo',
-        telefono: nuevoTelefono,
-        selected: true
-      }
-      setParticipantes([...participantes, nuevoParticipante])
-      setNuevoNombre('')
-      setNuevoTelefono('')
-      setShowAddExternal(false)
+    const nombreLimpio = externo.nombre.trim()
+    const telefonoLimpio = externo.telefono.trim()
+
+    if (!nombreLimpio || !telefonoLimpio) return
+
+    const nuevo = {
+      id: Date.now(),
+      nombre: nombreLimpio,
+      telefono: telefonoLimpio,
+      interno: false
     }
+
+    setExternos((prev) => [...prev, nuevo])
+    setExterno({ nombre: '', telefono: '' })
   }
 
-  const eliminarParticipante = (id) => {
-    if (participantes.find(p => p.id === id)?.tipo !== 'yo') {
-      setParticipantes(participantes.filter(p => p.id !== id))
+  const eliminarParticipante = (id, interno) => {
+    if (interno) {
+      setAmigos((prev) => prev.map((amigo) => (amigo.id === id ? { ...amigo, selected: false } : amigo)))
+      return
     }
+
+    setExternos((prev) => prev.filter((participante) => participante.id !== id))
   }
 
-  const handleCrear = () => {
-    if (nombre.trim() && metaAhorro && participantes.filter(p => p.selected).length > 0) {
-      alert(`¡Grupo "${nombre}" creado exitosamente!`)
+  const handleCrearGrupo = () => {
+    if (!nombre.trim() || !metaNumerica || participantes.length === 0) return
+
+    setPreviewActive(true)
+    setTimeout(() => {
+      alert('¡Grupo creado! Ya puedes comenzar a invitar a tus amigos.')
       navigate('/openfriends')
-    } else {
-      alert('Por favor completa todos los campos requeridos')
-    }
+    }, 600)
   }
+
+  const getIniciales = (texto) =>
+    texto
+      .split(' ')
+      .map((n) => n[0])
+      .filter(Boolean)
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
 
   return (
     <div className="screen crear-grupo-screen">
       <div className="screen-header">
-        <button className="icon-button" onClick={() => navigate(-1)}>
+        <button className="icon-button" aria-label="Regresar" onClick={() => navigate(-1)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M15 18l-6-6 6-6"/>
+            <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="screen-title">Nuevo grupo</h1>
-        <div style={{ width: '40px' }}></div>
+        <h1 className="screen-title">Crear grupo</h1>
+        <div style={{ width: '40px' }} aria-hidden="true"></div>
       </div>
 
-      <div className="screen-content">
-        {/* Preview del grupo */}
-        <div className="grupo-preview" style={{ backgroundColor: colorSeleccionado }}>
-          <div className="preview-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
+      <div className="screen-content light">
+        <div
+          className="grupo-preview"
+          style={{
+            background: `linear-gradient(135deg, ${color.value} 0%, rgba(17, 24, 39, 0.92) 100%)`
+          }}
+        >
+          <div className="preview-icon" role="img" aria-label="Icono del grupo">
+            🥳
           </div>
           <div className="preview-name">{nombre || 'Nombre del grupo'}</div>
-          {metaAhorro && (
-            <div className="preview-meta">Meta: ${parseInt(metaAhorro).toLocaleString('es-MX')}</div>
-          )}
+          <div className="preview-meta">Meta colectiva: {metaLegible}</div>
+          <div className="preview-meta">Participantes: {participantes.length}</div>
         </div>
 
-        {/* Nombre del grupo */}
         <div className="form-group">
-          <label className="form-label">
-            📝 Nombre del grupo
-            <span className="required">*</span>
+          <label className="form-label" htmlFor="nombre-grupo">
+            Nombre del grupo <span className="required">*</span>
           </label>
           <input
-            type="text"
+            id="nombre-grupo"
             className="form-input"
-            placeholder="Ej: Viaje a Cancún, Roomies, etc."
+            placeholder="Ej. Roadtrip a Valle"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
+            autoComplete="off"
           />
         </div>
 
-        {/* Meta de ahorro */}
         <div className="form-group">
-          <label className="form-label">
-            💰 Meta de ahorro
-            <span className="required">*</span>
+          <label className="form-label" htmlFor="meta-grupo">
+            Meta de ahorro
+            <span className="participants-count">Editable por todos</span>
           </label>
           <div className="input-with-prefix">
             <span className="input-prefix">$</span>
             <input
-              type="number"
+              id="meta-grupo"
               className="form-input with-prefix"
-              placeholder="0"
-              value={metaAhorro}
-              onChange={(e) => setMetaAhorro(e.target.value)}
+              placeholder="0.00"
+              value={meta}
+              onChange={(e) => setMeta(e.target.value)}
+              type="number"
+              min="0"
+              step="100"
+              inputMode="decimal"
             />
             <span className="input-suffix">MXN</span>
           </div>
         </div>
 
-        {/* Color del grupo */}
         <div className="form-group">
-          <label className="form-label">🎨 Color del grupo</label>
+          <label className="form-label">Color del grupo</label>
           <div className="colores-grid">
-            {colores.map((c) => (
+            {palette.map((option) => (
               <button
-                key={c.color}
-                className={`color-option ${colorSeleccionado === c.color ? 'selected' : ''}`}
-                style={{ backgroundColor: c.color }}
-                onClick={() => setColorSeleccionado(c.color)}
+                key={option.id}
+                type="button"
+                className={`color-option ${color.id === option.id ? 'selected' : ''}`}
+                style={{ backgroundColor: option.value }}
+                onClick={() => setColor(option)}
+                aria-label={`Color ${option.label}`}
+                aria-pressed={color.id === option.id}
               >
-                {colorSeleccionado === c.color && (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                )}
+                {color.id === option.id ? '✓' : ''}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Participantes */}
         <div className="form-group">
-          <label className="form-label">
-            👥 Participantes
-            <span className="participants-count">({participantes.filter(p => p.selected).length})</span>
-          </label>
-          
-          {/* Participantes agregados */}
-          <div className="participantes-list">
-            {participantes.map((p) => (
-              <div key={p.id} className="participante-item">
-                <div className="participante-avatar" style={{ backgroundColor: colorSeleccionado }}>
-                  {p.initials}
+          <label className="form-label">Selecciona amigos</label>
+          <div className="amigos-chips">
+            {amigos.map((amigo) => (
+              <button
+                key={amigo.id}
+                type="button"
+                className={`amigo-chip ${amigo.selected ? 'selected' : ''}`}
+                onClick={() => toggleAmigo(amigo.id)}
+                aria-pressed={amigo.selected}
+              >
+                <div className="amigo-avatar" aria-hidden="true">
+                  {getIniciales(amigo.nombre)}
                 </div>
-                <div className="participante-info">
-                  <div className="participante-nombre">{p.nombre}</div>
-                  {p.telefono && <div className="participante-telefono">{p.telefono}</div>}
-                  {p.tipo === 'openbank' && <div className="participante-badge">Openbank</div>}
-                  {p.tipo === 'externo' && <div className="participante-badge externo">Externo</div>}
+                <div className="amigo-info">
+                  <span className="amigo-nombre">{amigo.nombre}</span>
+                  <span className="amigo-telefono">{amigo.telefono}</span>
                 </div>
-                {p.tipo !== 'yo' && (
-                  <button
-                    className="delete-button"
-                    onClick={() => eliminarParticipante(p.id)}
-                  >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M18 6L6 18M6 6l12 12"/>
-                    </svg>
-                  </button>
-                )}
-              </div>
+                <span className="add-icon" aria-hidden="true">{amigo.selected ? '✓' : '+'}</span>
+              </button>
             ))}
           </div>
+        </div>
 
-          {/* Agregar amigos de Openbank */}
-          {amigosOpenbank.filter(a => !participantes.find(p => p.id === a.id)).length > 0 && (
-            <div className="agregar-amigos">
-              <div className="subsection-label">Agregar de Openbank</div>
-              <div className="amigos-chips">
-                {amigosOpenbank
-                  .filter(a => !participantes.find(p => p.id === a.id))
-                  .map((amigo) => (
-                    <button
-                      key={amigo.id}
-                      className="amigo-chip"
-                      onClick={() => agregarAmigo(amigo)}
-                    >
-                      <div className="amigo-avatar">{amigo.initials}</div>
-                      <span>{amigo.nombre}</span>
-                      <span className="add-icon">+</span>
-                    </button>
-                  ))}
-              </div>
-            </div>
-          )}
+        <div className="form-group">
+          <label className="form-label">
+            Participantes
+            <span className="participants-count">{participantes.length} miembros</span>
+          </label>
 
-          {/* Agregar externo */}
-          {!showAddExternal ? (
-            <button
-              className="secondary-button"
-              onClick={() => setShowAddExternal(true)}
-            >
-              + Agregar persona externa
-            </button>
+          {participantes.length === 0 ? (
+            <p className="empty-participants" role="status">
+              Selecciona al menos un amigo para comenzar tu grupo.
+            </p>
           ) : (
-            <div className="add-external-form fade-in">
-              <div className="subsection-label">Agregar persona externa</div>
-              <input
-                type="text"
-                className="form-input"
-                placeholder="Nombre completo"
-                value={nuevoNombre}
-                onChange={(e) => setNuevoNombre(e.target.value)}
-              />
-              <input
-                type="tel"
-                className="form-input"
-                placeholder="Teléfono (para WhatsApp)"
-                value={nuevoTelefono}
-                onChange={(e) => setNuevoTelefono(e.target.value)}
-              />
-              <div className="form-actions">
-                <button
-                  className="secondary-button"
-                  onClick={() => {
-                    setShowAddExternal(false)
-                    setNuevoNombre('')
-                    setNuevoTelefono('')
-                  }}
-                >
-                  Cancelar
-                </button>
-                <button
-                  className="primary-button"
-                  onClick={agregarExterno}
-                  disabled={!nuevoNombre.trim() || !nuevoTelefono.trim()}
-                  style={{ opacity: (!nuevoNombre.trim() || !nuevoTelefono.trim()) ? 0.5 : 1 }}
-                >
-                  Agregar
-                </button>
-              </div>
+            <div className="participantes-list">
+              {participantes.map((participante) => (
+                <div key={participante.id} className="participante-item">
+                  <div
+                    className="participante-avatar"
+                    style={{ backgroundColor: participante.interno ? color.value : '#0078FF' }}
+                  >
+                    {getIniciales(participante.nombre)}
+                  </div>
+                  <div className="participante-info">
+                    <span className="participante-nombre">{participante.nombre}</span>
+                    <span className="participante-telefono">{participante.telefono}</span>
+                  </div>
+                  <span className={`participante-badge ${participante.interno ? '' : 'externo'}`}>
+                    {participante.interno ? 'Openbank' : 'Externo'}
+                  </span>
+                  <button
+                    className="delete-button"
+                    aria-label={`Eliminar ${participante.nombre} del grupo`}
+                    onClick={() => eliminarParticipante(participante.id, participante.interno)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Botón crear */}
+        <div className="form-group agregar-amigos">
+          <div className="subsection-label">Agregar externos</div>
+          <div className="add-external-form">
+            <input
+              className="form-input"
+              placeholder="Nombre completo"
+              value={externo.nombre}
+              onChange={(e) => setExterno((prev) => ({ ...prev, nombre: e.target.value }))}
+            />
+            <input
+              className="form-input"
+              placeholder="Teléfono (WhatsApp)"
+              value={externo.telefono}
+              onChange={(e) => setExterno((prev) => ({ ...prev, telefono: e.target.value }))}
+              inputMode="tel"
+            />
+            <div className="form-actions">
+              <button
+                className="secondary-button"
+                type="button"
+                onClick={() => setExterno({ nombre: '', telefono: '' })}
+              >
+                Limpiar
+              </button>
+              <button className="primary-button" type="button" onClick={agregarExterno}>
+                Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+
         <button
           className="primary-button large"
-          onClick={handleCrear}
-          style={{ 
-            backgroundColor: colorSeleccionado,
-            marginTop: 'var(--spacing-3x)'
-          }}
+          type="button"
+          onClick={handleCrearGrupo}
+          disabled={!nombre.trim() || !metaNumerica || participantes.length === 0}
         >
-          Crear grupo
+          Lanzar grupo
         </button>
+
+        {previewActive && <div aria-live="polite" style={{ marginTop: 16 }}>Preparando invitaciones…</div>}
       </div>
     </div>
   )

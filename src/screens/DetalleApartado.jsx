@@ -3,189 +3,209 @@ import { useNavigate, useParams } from 'react-router-dom'
 import './DetalleApartado.css'
 import { formatCurrency } from '../utils/format'
 
+const apartados = {
+  1: {
+    nombre: 'Viaje Cancún',
+    descripcion: 'Objetivo compartido para reservar vuelos y hospedaje',
+    meta: 20000,
+    ahorrado: 14250,
+    color: '#E91E63',
+    miembros: [
+      { id: 1, nombre: 'Tú', aporte: 5250, progreso: 70 },
+      { id: 2, nombre: 'María García', aporte: 4500, progreso: 60 },
+      { id: 3, nombre: 'Carlos Ruiz', aporte: 3500, progreso: 50 },
+      { id: 4, nombre: 'Ana López', aporte: 3000, progreso: 45 }
+    ],
+    actividades: [
+      { id: 1, tipo: 'aporte', titulo: 'Aporte mensual', detalle: 'María aportó $1,500', fecha: 'oct 25 2025', monto: 1500 },
+      { id: 2, tipo: 'votacion', titulo: 'Votación · Hotel seleccionado', detalle: '3/4 votos a favor', fecha: 'oct 23 2025', monto: 0 },
+      { id: 3, tipo: 'aporte', titulo: 'Pago recibido', detalle: 'Carlos aportó $1,200', fecha: 'oct 18 2025', monto: 1200 },
+      { id: 4, tipo: 'nota', titulo: 'Meta intermedia alcanzada', detalle: '70% completado', fecha: 'oct 10 2025', monto: 0 }
+    ]
+  },
+  2: {
+    nombre: 'Roomies Depto',
+    descripcion: 'Fondo compartido para renta y servicios',
+    meta: 12000,
+    ahorrado: 8800,
+    color: '#3DDC97',
+    miembros: [
+      { id: 1, nombre: 'Tú', aporte: 4400, progreso: 73 },
+      { id: 2, nombre: 'Pedro Sánchez', aporte: 2400, progreso: 40 },
+      { id: 3, nombre: 'Fer Martínez', aporte: 2000, progreso: 33 }
+    ],
+    actividades: [
+      { id: 1, tipo: 'aporte', titulo: 'Pago de renta', detalle: 'Pedro aportó $2,400', fecha: 'oct 20 2025', monto: 2400 },
+      { id: 2, tipo: 'nota', titulo: 'Límite ajustado', detalle: 'Meta mensual actualizada a $12,000', fecha: 'oct 02 2025', monto: 0 }
+    ]
+  }
+}
+
 const DetalleApartado = ({ setShowBottomNav }) => {
   const navigate = useNavigate()
   const { id } = useParams()
-  const [showVotaciones, setShowVotaciones] = useState(false)
+  const apartado = apartados[id] || apartados[1]
+  const [mostrarVotaciones, setMostrarVotaciones] = useState(false)
 
   useEffect(() => {
-    setShowBottomNav(true)
+    setShowBottomNav(false)
+    return () => setShowBottomNav(true)
   }, [setShowBottomNav])
 
-  const apartado = {
-    id: 1,
-    nombre: 'Viaje Cancún',
-    color: '#E91E63',
-    objetivo: 20000,
-    actual: 12000,
-    progreso: 60,
-    miembros: [
-      { id: 1, nombre: 'Jorge Luis', initials: 'JL', aporte: 3000 },
-      { id: 2, nombre: 'María García', initials: 'MG', aporte: 2500 },
-      { id: 3, nombre: 'Carlos Ruiz', initials: 'CR', aporte: 3500 },
-      { id: 4, nombre: 'Ana López', initials: 'AL', aporte: 2000 },
-      { id: 5, nombre: 'Pedro Sánchez', initials: 'PS', aporte: 1000 },
-      { id: 6, nombre: 'Laura Martínez', initials: 'LM', aporte: 0 },
-    ],
-    votaciones: [
-      { id: 1, concepto: 'Reserva de hotel', monto: 8000, votos: 3, total: 6 },
-      { id: 2, concepto: 'Vuelos', monto: 6000, votos: 5, total: 6 }
-    ],
-    movimientos: [
-      { id: 1, tipo: 'aporte', usuario: 'Carlos Ruiz', monto: 1500, fecha: 'oct 25 2025' },
-      { id: 2, tipo: 'aporte', usuario: 'María García', monto: 1000, fecha: 'oct 23 2025' },
-      { id: 3, tipo: 'gasto', concepto: 'Anticipo hotel', monto: -2000, fecha: 'oct 20 2025' },
-    ]
-  }
+  const progresoTotal = Math.round((apartado.ahorrado / apartado.meta) * 100)
+  const faltante = Math.max(apartado.meta - apartado.ahorrado, 0)
+  const aportePromedio = apartado.ahorrado / apartado.miembros.length
+  const proximaMeta = Math.min(apartado.meta, apartado.ahorrado + 2500)
+
+  const quickActions = [
+    {
+      icono: '💸',
+      titulo: 'Aportar',
+      descripcion: 'Actualiza el saldo del grupo',
+      accion: () => alert('Demo: registro de aporte en desarrollo')
+    },
+    {
+      icono: '🏷️',
+      titulo: 'Autorizar gasto',
+      descripcion: mostrarVotaciones ? 'Ocultar solicitudes de retiro' : 'Aprueba retiros del apartado',
+      accion: () => setMostrarVotaciones((prev) => !prev)
+    }
+  ]
 
   return (
     <div className="screen detalle-apartado-screen">
       <div className="screen-header">
         <button className="icon-button" onClick={() => navigate(-1)} aria-label="Regresar">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M15 18l-6-6 6-6"/>
+            <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
         <h1 className="screen-title">{apartado.nombre}</h1>
-        <button className="icon-button">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="6" r="1" fill="currentColor"/>
-            <circle cx="12" cy="12" r="1" fill="currentColor"/>
-            <circle cx="12" cy="18" r="1" fill="currentColor"/>
-          </svg>
-        </button>
+        <div style={{ width: '40px' }} aria-hidden="true"></div>
       </div>
 
-      <div className="screen-content">
-        {/* Grupo Header */}
-        <div className="apartado-header" style={{ borderColor: apartado.color }}>
-          <div className="grupo-photo" style={{ backgroundColor: apartado.color }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
+      <div className="screen-content light">
+        <section
+          className="group-hero"
+          style={{ background: `linear-gradient(135deg, ${apartado.color} 0%, rgba(15, 23, 42, 0.92) 100%)` }}
+        >
+          <div className="hero-top">
+            <span className="hero-chip">Meta {formatCurrency(apartado.meta)}</span>
+            <h2>{apartado.descripcion}</h2>
+            <p>
+              Ahorrado {formatCurrency(apartado.ahorrado)} · {progresoTotal}% completado
+            </p>
           </div>
-        </div>
+          <div className="hero-progress">
+            <div className="hero-progress-bar">
+              <div className="hero-progress-fill" style={{ width: `${progresoTotal}%` }}></div>
+            </div>
+            <span className="hero-progress-label">{progresoTotal}% completado</span>
+          </div>
+          <div className="hero-metrics">
+            <div className="metric-card">
+              <span className="metric-label">Meta inmediata</span>
+              <span className="metric-value">{formatCurrency(proximaMeta)}</span>
+              <span className="metric-helper">Próximo hito sugerido</span>
+            </div>
+            <div className="metric-card">
+              <span className="metric-label">Restante</span>
+              <span className="metric-value">{formatCurrency(faltante)}</span>
+              <span className="metric-helper">Contribuye con {formatCurrency(Math.ceil(faltante / apartado.miembros.length / 100) * 100)} c/u</span>
+            </div>
+          </div>
+        </section>
 
-        {/* Progress Bar */}
-        <div className="progress-section">
-          <div className="progress-header">
-            <span className="progress-text">
-              {formatCurrency(apartado.actual)} de {formatCurrency(apartado.objetivo)}
-            </span>
-            <span className="progress-percentage">{apartado.progreso}%</span>
-          </div>
-          <div className="progress-bar">
-            <div 
-              className="progress-fill" 
-              style={{ 
-                width: `${apartado.progreso}%`,
-                backgroundColor: apartado.color 
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Miembros */}
-        <div className="miembros-section">
-          <div className="section-title">Participantes ({apartado.miembros.length})</div>
-          <div className="miembros-grid">
+        <section className="members-section">
+          <header className="section-header">
+            <h3>Participantes</h3>
+            <span>{apartado.miembros.length} personas involucradas</span>
+          </header>
+          <div className="members-grid">
             {apartado.miembros.map((miembro) => (
-              <div key={miembro.id} className="miembro-chip">
-                <div className="miembro-avatar" style={{ backgroundColor: apartado.color }}>
-                  {miembro.initials}
+              <article key={miembro.id} className="member-card">
+                <div className="member-avatar" aria-hidden="true">
+                  {miembro.nombre
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2)}
                 </div>
-                <div className="miembro-info">
-                  <div className="miembro-nombre">{miembro.nombre}</div>
-                  <div className="miembro-aporte">{formatCurrency(miembro.aporte)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Acciones */}
-        <div className="acciones-section">
-          <button className="accion-button primary">
-            <span className="accion-icon">💸</span>
-            <span>Aportar</span>
-          </button>
-          <button className="accion-button secondary">
-            <span className="accion-icon">🧾</span>
-            <span>Proponer gasto</span>
-          </button>
-          <button 
-            className="accion-button secondary"
-            onClick={() => setShowVotaciones(!showVotaciones)}
-          >
-            <span className="accion-icon">⚖️</span>
-            <span>Ver votaciones</span>
-          </button>
-        </div>
-
-        {/* Votaciones Panel */}
-        {showVotaciones && (
-          <div className="votaciones-panel fade-in">
-            <div className="section-title">Votaciones pendientes</div>
-            {apartado.votaciones.map((votacion) => (
-              <div key={votacion.id} className="votacion-card">
-                <div className="votacion-header">
-                  <div className="votacion-concepto">{votacion.concepto}</div>
-                  <div className="votacion-monto">{formatCurrency(votacion.monto)}</div>
-                </div>
-                <div className="votacion-progress">
-                  <div className="votos-count">{votacion.votos}/{votacion.total} han votado</div>
-                  <div className="votos-bar">
-                    <div 
-                      className="votos-fill" 
-                      style={{ width: `${(votacion.votos / votacion.total) * 100}%` }}
-                    />
+                <div className="member-info">
+                  <span className="member-name">{miembro.nombre}</span>
+                  <span className="member-amount">Aportado {formatCurrency(miembro.aporte)}</span>
+                  <div className="member-progress">
+                    <div className="member-progress-fill" style={{ width: `${miembro.progreso}%` }}></div>
                   </div>
+                  <span className="member-progress-label">{miembro.progreso}% del compromiso</span>
                 </div>
-                <div className="votacion-actions">
-                  <button className="vote-button approve">✅ Aprobar</button>
-                  <button className="vote-button reject">❌ Rechazar</button>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
+        </section>
+
+        <section className="actions-section" role="group" aria-label="Acciones rápidas del grupo">
+          {quickActions.map((accion) => (
+            <button key={accion.titulo} className="action-card" type="button" onClick={accion.accion}>
+              <span className="action-icon" aria-hidden="true">{accion.icono}</span>
+              <span className="action-title">{accion.titulo}</span>
+              <span className="action-desc">{accion.descripcion}</span>
+            </button>
+          ))}
+        </section>
+
+        {mostrarVotaciones && (
+          <section className="votes-section">
+            <header>
+              <h3>Retiros pendientes</h3>
+              <span>Autoriza antes del 30 oct</span>
+            </header>
+            <div className="vote-card">
+              <div className="vote-title">Pago de hospedaje · $4,200 · 3/4 firmas</div>
+              <div className="vote-progress">
+                <div className="vote-progress-fill" style={{ width: '75%' }}></div>
+              </div>
+              <button className="secondary-button" onClick={() => setMostrarVotaciones(false)}>
+                Autorizar retiro
+              </button>
+            </div>
+            <div className="vote-card subdued">
+              <div className="vote-title">Tour isla Mujeres · $1,800 · 2/4 firmas</div>
+              <div className="vote-progress">
+                <div className="vote-progress-fill" style={{ width: '50%' }}></div>
+              </div>
+            </div>
+          </section>
         )}
 
-        {/* Historial */}
-        <div className="historial-section">
-          <div className="section-title">Historial de movimientos</div>
-          <div className="movimientos-list">
-            {apartado.movimientos.map((mov) => (
-              <div key={mov.id} className="movimiento-item">
-                <div 
-                  className="movimiento-icon"
-                  style={{ 
-                    backgroundColor: mov.tipo === 'aporte' ? apartado.color + '33' : 'rgba(233, 30, 99, 0.2)' 
-                  }}
-                >
-                  {mov.tipo === 'aporte' ? '💰' : '🧾'}
-                </div>
-                <div className="movimiento-info">
-                  <div className="movimiento-desc">
-                    {mov.tipo === 'aporte' ? `Aporte de ${mov.usuario}` : mov.concepto}
+        <section className="timeline-section">
+          <header className="section-header">
+            <h3>Actividades recientes</h3>
+          </header>
+          <div className="timeline">
+            {apartado.actividades.map((actividad) => (
+              <article key={actividad.id} className="timeline-item">
+                <div className={`timeline-dot ${actividad.tipo}`} aria-hidden="true"></div>
+                <div className="timeline-content">
+                  <div className="timeline-title">{actividad.titulo}</div>
+                  <div className="timeline-detail">{actividad.detalle}</div>
+                  <div className="timeline-meta">
+                    <span>{actividad.fecha}</span>
+                    {actividad.monto !== 0 && (
+                      <span className={`timeline-amount ${actividad.monto > 0 ? 'positive' : 'negative'}`}>
+                        {actividad.monto > 0 ? '+' : ''}
+                        {formatCurrency(actividad.monto)}
+                      </span>
+                    )}
                   </div>
-                  <div className="movimiento-fecha">{mov.fecha}</div>
                 </div>
-                <div className={`movimiento-monto ${mov.tipo === 'aporte' ? 'positive' : 'negative'}`}>
-                  {mov.tipo === 'aporte' ? '+' : ''}{formatCurrency(Math.abs(mov.monto))}
-                </div>
-              </div>
+              </article>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Botón Crédito Grupal */}
-        <button 
-          className="primary-button"
-          onClick={() => navigate(`/credito/${id}`)}
-        >
+        <button className="primary-button primary-white" onClick={() => navigate(`/credito/${id}`)}>
           Solicitar crédito grupal
         </button>
       </div>

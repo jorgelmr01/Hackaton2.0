@@ -1,233 +1,206 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './CreditoCompartido.css'
 import { formatCurrency } from '../utils/format'
 
+const grupos = {
+  1: { nombre: 'Viaje Cancún', icono: '🌴', integrantes: ['Tú', 'María', 'Carlos', 'Ana'] },
+  2: { nombre: 'Roomies Depto', icono: '🏠', integrantes: ['Tú', 'Pedro', 'Fer'] }
+}
+
+const plazosDisponibles = [3, 6, 12]
+
+const tasaInteres = 0.125
+
+const estadoInicialFirmas = (integrantes) =>
+  integrantes.map((nombre, index) => ({
+    nombre,
+    estado: index === 0 ? 'firmado' : 'pendiente'
+  }))
+
 const CreditoCompartido = ({ setShowBottomNav }) => {
-  const navigate = useNavigate()
   const { id } = useParams()
-  const [monto, setMonto] = useState(50000)
+  const navigate = useNavigate()
+  const grupo = grupos[id] || grupos[1]
+  const [monto, setMonto] = useState(85000)
   const [plazo, setPlazo] = useState(6)
-  const [firmas, setFirmas] = useState([])
-  
-  const maxMonto = 200000
-  const tasaAnual = 12.5
-  
+  const [contratoEnviado, setContratoEnviado] = useState(false)
+  const [firmas, setFirmas] = useState(() => estadoInicialFirmas(grupo.integrantes))
+
   useEffect(() => {
-    setShowBottomNav(true)
+    setShowBottomNav(false)
+    return () => setShowBottomNav(true)
   }, [setShowBottomNav])
 
-  const grupo = {
-    id: 1,
-    nombre: 'Viaje Cancún',
-    color: '#E91E63',
-    miembros: [
-      { id: 1, nombre: 'Jorge Luis', initials: 'JL', firmado: false },
-      { id: 2, nombre: 'María García', initials: 'MG', firmado: false },
-      { id: 3, nombre: 'Carlos Ruiz', initials: 'CR', firmado: false },
-      { id: 4, nombre: 'Ana López', initials: 'AL', firmado: false },
-      { id: 5, nombre: 'Pedro Sánchez', initials: 'PS', firmado: false },
-      { id: 6, nombre: 'Laura Martínez', initials: 'LM', firmado: false },
-    ]
-  }
-
-  const calcularPagoMensual = () => {
-    const tasaMensual = (tasaAnual / 100) / 12
-    const pagoMensual = monto * (tasaMensual * Math.pow(1 + tasaMensual, plazo)) / (Math.pow(1 + tasaMensual, plazo) - 1)
-    return pagoMensual
-  }
-
-  const calcularPagoPorPersona = () => {
-    return calcularPagoMensual() / grupo.miembros.length
-  }
-
-  const handleSliderChange = (e) => {
-    setMonto(parseInt(e.target.value))
-  }
-
-  const toggleFirma = (memberId) => {
-    if (firmas.includes(memberId)) {
-      setFirmas(firmas.filter(id => id !== memberId))
-    } else {
-      setFirmas([...firmas, memberId])
-      // Simular vibración
-      if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(50)
-      }
+  const calculos = useMemo(() => {
+    const interesMensual = tasaInteres / 12
+    const numeroPagos = plazo
+    const pagoMensual =
+      monto === 0
+        ? 0
+        : (monto * interesMensual) / (1 - Math.pow(1 + interesMensual, -numeroPagos))
+    const pagoPorPersona = pagoMensual / grupo.integrantes.length
+    const totalAPagar = pagoMensual * numeroPagos
+    return {
+      pagoMensual,
+      pagoPorPersona,
+      totalAPagar
     }
+  }, [monto, plazo, grupo.integrantes.length])
+
+  const pendientes = firmas.filter((firma) => firma.estado !== 'firmado').length
+  const todosFirmaron = pendientes === 0
+
+  const handleAccionContrato = () => {
+    if (!contratoEnviado) {
+      setContratoEnviado(true)
+      setFirmas((prev) =>
+        prev.map((firma, index) =>
+          index === 0 ? firma : { ...firma, estado: 'en-proceso' }
+        )
+      )
+      alert('Contrato enviado. Cada integrante recibirá la solicitud de firma digital en su app Openbank.')
+      return
+    }
+
+    if (!todosFirmaron) {
+      setFirmas((prev) => prev.map((firma) => ({ ...firma, estado: 'firmado' })))
+      alert('Firmas capturadas. Contrato consolidado y fondos listos para liberarse.')
+      return
+    }
+
+    alert('Fondos liberados a la cuenta del grupo. Notificamos por chat a todos los integrantes.')
+    navigate(-1)
   }
 
-  const handleSolicitar = () => {
-    if (firmas.length === grupo.miembros.length) {
-      alert('¡Solicitud de crédito enviada! Recibirás una respuesta en 24-48 horas.')
-      navigate('/openfriends')
-    } else {
-      alert(`Faltan ${grupo.miembros.length - firmas.length} firmas para completar la solicitud.`)
-    }
-  }
+  const ctaLabel = !contratoEnviado
+    ? 'Enviar contrato para firma digital'
+    : !todosFirmaron
+      ? 'Registrar firmas recibidas'
+      : 'Liberar fondos al grupo'
 
   return (
     <div className="screen credito-screen">
       <div className="screen-header">
-        <button className="icon-button" onClick={() => navigate(-1)}>
+        <button className="icon-button" onClick={() => navigate(-1)} aria-label="Regresar">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M15 18l-6-6 6-6"/>
+            <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
         <h1 className="screen-title">Crédito compartido</h1>
         <div style={{ width: '40px' }}></div>
       </div>
 
-      <div className="screen-content">
-        {/* Grupo Info */}
-        <div className="credito-grupo-info">
-          <div className="grupo-badge" style={{ backgroundColor: grupo.color }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
+      <div className="screen-content light">
+        <section className="credit-hero">
+          <div className="credit-hero-meta">
+            <span className="credit-tag">Financiamiento colectivo</span>
+            <h2>{grupo.icono} {grupo.nombre}</h2>
+            <p>
+              Gestiona el crédito con tasa preferente de {(tasaInteres * 100).toFixed(1)}% anual. Al completar las firmas, enviamos contrato y liberamos los fondos al instante.
+            </p>
           </div>
-          <div>
-            <div className="grupo-label">Grupo</div>
-            <div className="grupo-name">{grupo.nombre}</div>
+          <div className="credit-hero-pills">
+            <span className="pill">Sin comisión por apertura</span>
+            <span className="pill">Pagos automáticos coordinados</span>
+            <span className="pill">Adelantos sin penalización</span>
           </div>
-        </div>
+        </section>
 
-        {/* Monto Slider */}
-        <div className="card credito-calculator">
-          <div className="calculator-section">
-            <label className="calculator-label">Monto del crédito</label>
-            <div className="monto-display">{formatCurrency(monto)}</div>
+        <section className="calculator">
+          <div className="calculator-block">
+            <span className="block-label">Monto que necesita el grupo</span>
+            <div className="amount-display">{formatCurrency(monto)}</div>
             <input
+              id="monto-credito"
+              className="amount-slider"
               type="range"
               min="10000"
-              max={maxMonto}
+              max="200000"
               step="5000"
               value={monto}
-              onChange={handleSliderChange}
-              className="monto-slider"
-              style={{ 
-                background: `linear-gradient(to right, ${grupo.color} 0%, ${grupo.color} ${(monto / maxMonto) * 100}%, rgba(255,255,255,0.1) ${(monto / maxMonto) * 100}%, rgba(255,255,255,0.1) 100%)` 
-              }}
+              onChange={(e) => setMonto(Number(e.target.value))}
             />
-            <div className="slider-labels">
-              <span>$10,000</span>
-              <span>${maxMonto.toLocaleString('es-MX')}</span>
+            <div className="slider-range">
+              <span>{formatCurrency(10000)}</span>
+              <span>{formatCurrency(200000)}</span>
             </div>
           </div>
 
-          {/* Plazo */}
-          <div className="calculator-section">
-            <label className="calculator-label">Plazo</label>
-            <div className="plazo-buttons">
-              <button
-                className={`plazo-button ${plazo === 3 ? 'active' : ''}`}
-                onClick={() => setPlazo(3)}
-              >
-                3 meses
-              </button>
-              <button
-                className={`plazo-button ${plazo === 6 ? 'active' : ''}`}
-                onClick={() => setPlazo(6)}
-              >
-                6 meses
-              </button>
-              <button
-                className={`plazo-button ${plazo === 12 ? 'active' : ''}`}
-                onClick={() => setPlazo(12)}
-              >
-                12 meses
-              </button>
-            </div>
-          </div>
-
-          {/* Tasa */}
-          <div className="calculator-section">
-            <div className="tasa-info">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 16v-4M12 8h.01"/>
-              </svg>
-              <span>Tasa anual {tasaAnual}% - fija</span>
-            </div>
-          </div>
-
-          {/* Pago Mensual */}
-          <div className="pago-result">
-            <div className="pago-label">Pago mensual grupal</div>
-            <div className="pago-amount">{formatCurrency(calcularPagoMensual())}</div>
-            <div className="pago-per-person">
-              {formatCurrency(calcularPagoPorPersona())} por persona
-            </div>
-          </div>
-        </div>
-
-        {/* Firmas */}
-        <div className="firmas-section">
-          <div className="section-title">
-            Firmas digitales
-            <span className="firmas-count">{firmas.length}/{grupo.miembros.length}</span>
-          </div>
-          <div className="firmas-grid">
-            {grupo.miembros.map((miembro) => {
-              const haFirmado = firmas.includes(miembro.id)
-              return (
+          <div className="calculator-block">
+            <span className="block-label">Selecciona el plazo</span>
+            <div className="term-options">
+              {plazosDisponibles.map((p) => (
                 <button
-                  key={miembro.id}
-                  className={`firma-item ${haFirmado ? 'firmado' : ''}`}
-                  onClick={() => toggleFirma(miembro.id)}
+                  key={p}
+                  type="button"
+                  className={`term-button ${plazo === p ? 'active' : ''}`}
+                  onClick={() => setPlazo(p)}
                 >
-                  <div 
-                    className="firma-avatar"
-                    style={{ backgroundColor: haFirmado ? grupo.color : 'rgba(255,255,255,0.1)' }}
-                  >
-                    {haFirmado ? '✓' : miembro.initials}
-                  </div>
-                  <div className="firma-nombre">{miembro.nombre}</div>
-                  {haFirmado && (
-                    <div className="firma-badge">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    </div>
-                  )}
+                  {p} meses
                 </button>
-              )
-            })}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Información adicional */}
-        <div className="info-card">
-          <div className="info-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue-obi)" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 16v-4M12 8h.01"/>
-            </svg>
-            <span>Información importante</span>
+          <div className="overview-grid">
+            <div className="overview-card">
+              <span className="overview-label">Pago por persona</span>
+              <span className="overview-value">{formatCurrency(calculos.pagoPorPersona)}</span>
+              <span className="overview-helper">{grupo.integrantes.length} integrantes firmantes</span>
+            </div>
+            <div className="overview-card">
+              <span className="overview-label">Tasa de financiamiento</span>
+              <span className="overview-value">{(tasaInteres * 100).toFixed(1)}%</span>
+              <span className="overview-helper">Incluye intereses fijos y seguro</span>
+            </div>
           </div>
-          <ul className="info-list">
-            <li>Todos los miembros deben firmar para procesar la solicitud</li>
-            <li>La responsabilidad del crédito es compartida</li>
-            <li>Cada miembro pagará su parte mensualmente</li>
-            <li>Aprobación en 24-48 horas hábiles</li>
-          </ul>
-        </div>
+        </section>
 
-        {/* Botón Solicitar */}
-        <button
-          className="primary-button"
-          onClick={handleSolicitar}
-          style={{ 
-            opacity: firmas.length === grupo.miembros.length ? 1 : 0.6,
-            backgroundColor: firmas.length === grupo.miembros.length ? grupo.color : 'var(--red-primary)'
-          }}
-        >
-          {firmas.length === grupo.miembros.length 
-            ? '✓ Solicitar crédito' 
-            : `Solicitar (${firmas.length}/${grupo.miembros.length} firmas)`}
+        <section className="signatures-section">
+          <header>
+            <h3>Firmas digitales</h3>
+            <span className={todosFirmaron ? 'status success' : contratoEnviado ? 'status pending' : 'status draft'}>
+              {todosFirmaron ? 'Contrato consolidado' : contratoEnviado ? `${pendientes} pendientes` : 'Borrador listo'}
+            </span>
+          </header>
+          <div className="signatures-grid">
+            {firmas.map((firma) => (
+              <article key={firma.nombre} className={`signature-card ${firma.estado}`}>
+                <div className="signature-avatar" aria-hidden="true">
+                  {firma.nombre
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2)}
+                </div>
+                <span className="signature-name">{firma.nombre}</span>
+                <span className="signature-state">
+                  {firma.estado === 'firmado' && 'Firmado digitalmente'}
+                  {firma.estado === 'en-proceso' && 'Esperando firma'}
+                  {firma.estado === 'pendiente' && 'Invita a firmar'}
+                </span>
+              </article>
+            ))}
+          </div>
+          {todosFirmaron && (
+            <div className="success-banner">
+              <strong>¡Todo listo!</strong>
+              <span>El contrato está completo. Los fondos se depositarán en la cuenta colectiva en minutos.</span>
+            </div>
+          )}
+        </section>
+
+        <section className="credit-info">
+          <strong>Resumen del proceso</strong>
+          <span>1. Enviamos el contrato digital a cada integrante (firma con FaceID/biometría).</span>
+          <span>2. Confirmamos la recepción de firmas y centralizamos el pagaré.</span>
+          <span>3. Depositamos los fondos en la cuenta del grupo y notificamos por chat.</span>
+        </section>
+
+        <button className="primary-button" style={{ marginTop: '24px' }} onClick={handleAccionContrato}>
+          {ctaLabel}
         </button>
       </div>
     </div>
@@ -235,4 +208,3 @@ const CreditoCompartido = ({ setShowBottomNav }) => {
 }
 
 export default CreditoCompartido
-
